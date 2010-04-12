@@ -22,7 +22,7 @@ tout en minuscule, mots séparés par \_
 ex : liste_simplement_chainée
 
 *Classe* :
-Premiere lettre en majuscule et chaque mot debute par une maj sans "_"
+Premiere lettre en majuscule et chaque mot debute par une maj sans "_" <br>
 ex : MaPremiereClasse
 
 *Fonctions* :
