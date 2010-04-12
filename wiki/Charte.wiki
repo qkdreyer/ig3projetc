@@ -15,7 +15,7 @@ Bon alors deja le projet sera en C++ donc ca donnerait comme categorie de noms :
 *Variables*
 *Structures* (eventuellement pour faire plaisir a mike ;) )
 
-Donc je propose (soumis a modifications de votre part :
+Donc je propose (soumis a modifications de votre part) : <br>
 
 *Fichier* : 
 tout en minuscule, mots séparés par '_' <br>
@@ -23,22 +23,22 @@ ex : liste_simplement_chainée
 
 *Classe* :
 Premiere lettre en majuscule et chaque mot debute par une maj sans "_" <br>
-ex : MaPremiereClasse
+ex : MaPremiereClasse<br>
 
 *Fonctions* :
-premiere lettre en minuscules, chaque autre mot commence par une maj sans "_"
-ex : calculeFermTrans
+premiere lettre en minuscules, chaque autre mot commence par une maj sans "_"<br>
+ex : calculeFermTrans<br>
 
 *Variables* :
-alors pour les variables membres des classes quelque chose comme ca :
-m_variableMembre
-et pour les variables non membres (parametres de fonction ou variable de fonction):
-variableDeFonction
+alors pour les variables membres des classes quelque chose comme ca :<br>
+m_variableMembre<br>
+et pour les variables non membres (parametres de fonction ou variable de fonction):<br>
+variableDeFonction<br>
 
-Ca pourrait etre bien que les variables de type pointeur (ou reference) finissent par un _p histoire qu'on sache directement si c'est une variable ou une adresse
+Ca pourrait etre bien que les variables de type pointeur (ou reference) finissent par un _p histoire qu'on sache directement si c'est une variable ou une adresse<br>
 
 
 *Structures* 
-Si on en fait, je propose qu'elles finissent par un _s pour qu'on identifie ca directement
+Si on en fait, je propose qu'elles finissent par un _s pour qu'on identifie ca directement<br>
 
-Voili voilou
+Voili voilou<br>
