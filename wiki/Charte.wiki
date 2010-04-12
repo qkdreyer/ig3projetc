@@ -1,0 +1,44 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+Un ptit résumé des conventions de nommage que j'aimerai bien qu'on utilise
+
+
+= Details =
+
+Bon alors deja le projet sera en C++ donc ca donnerait comme categorie de noms :
+
+*Fichier
+*Classe
+*Fonctions
+*Variables
+*Strucures (eventuellement pour faire plaisir a mike ;) )
+
+Donc je propose (soumis a modifications de votre part :
+
+*Fichier : 
+tout en minuscule, mots séparés par "_"
+ex : liste_simplement_chainée
+
+*Classe :
+Premiere lettre en majuscule et chaque mot debute par une maj sans "_"
+ex : MaPremiereClasse
+
+*Fonctions :
+premiere lettre en minuscules, chaque autre mot commence par une maj sans "_"
+ex : calculeFermTrans
+
+*Variables :
+alors pour les variables membres des classes quelque chose comme ca :
+m_variableMembre
+et pour les variables non membres (parametres de fonction ou variable de fonction):
+variableDeFonction
+
+Ca pourrait etre bien que les variables de type pointeur (ou reference) finissent par un _p histoire qu'on sache directement si c'est une variable ou une adresse
+
+
+*Structures 
+Si on en fait, je propose qu'elles finissent par un _s pour qu'on identifie ca directement
+
+Voili voilou
