@@ -23,7 +23,7 @@ ex : liste_simplement_chainée
 
 *Classe* :
 Premiere lettre en majuscule et chaque mot debute par une maj sans `_` <br>
-ex : MaPremiereClasse <br>
+ex : MaPremiereClasse 
 
 *Fonctions* :
 premiere lettre en minuscules, chaque autre mot commence par une maj sans `_`<br>
