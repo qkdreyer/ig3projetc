@@ -18,7 +18,7 @@ Bon alors deja le projet sera en C++ donc ca donnerait comme categorie de noms :
 Donc je propose (soumis a modifications de votre part :
 
 *Fichier* : 
-tout en minuscule, mots séparés par "_"
+tout en minuscule, mots séparés par \"\_\"
 ex : liste_simplement_chainée
 
 *Classe* :
