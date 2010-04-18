@@ -9,113 +9,129 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 ============================================================================= */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <string>
 #include "../h/sommet.h"
 
-void printS (sommet* s, int n) {
+Sommet::Sommet () : m_tailleGraph(0), m_tabSommet(NULL){
+
+}
+
+Sommet::Sommet (int taille) : m_tailleGraph(taille) {
+    m_tabSommet = (s_sommet*) malloc( m_tailleGraph * sizeof(s_sommet));
+
+}
+
+Sommet::~Sommet (){
+
+}
+
+void Sommet::print () {
     int i;
-    for (i = 0; i < n; i++) {
-        printf("sommet %d :\n  nom = %s, freq = %d, d(%d), f(%d)\n", s[i].id, s[i].nom, s[i].freq, s[i].deb, s[i].fin);
+    for (i = 0; i < m_tailleGraph; i++) {
+        cout << "sommet " << m_tabSommet[i].id << " :\n  nom = " << m_tabSommet[i].nom << ", freq = " << m_tabSommet[i].freq << ", d(" << m_tabSommet[i].deb << "), f(" << m_tabSommet[i].fin << ")" << endl;
     }
 }
 
-void printCFC (sommet* s, int n) {
-    int d = s[0].deb, f = s[0].fin, i;
-    printf("Les composantes fortement connexes du graphe sont :\n{%d", s[0].id);
-    for (i = 0; i < n-1; i++) {
-        if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
-            printf(", %d", s[i+1].id);
+void Sommet::printCFC () {
+    int d = m_tabSommet[0].deb, f = m_tabSommet[0].fin, i;
+    cout << "Les composantes fortement connexes du graphe sont :\n{" << m_tabSommet[0].id;
+    for (i = 0; i < m_tailleGraph - 1; i++) {
+        if ((d < (m_tabSommet[i+1].deb)) && (f > (m_tabSommet[i+1].fin))) {
+            cout << ", " << m_tabSommet[i+1].id;
         } else {
-            d = s[i+1].deb;
-            f = s[i+1].fin;
-            if (i+1 < n)
-                printf("}, {%d", s[i+1].id);
+            d = m_tabSommet[i+1].deb;
+            f = m_tabSommet[i+1].fin;
+            if (i+1 < m_tailleGraph)
+                cout << "}, {%d" << m_tabSommet[i+1].id;
         }
     }
-    printf("}.\n");
+    cout << "}.\n";
 }
 
-sommet* iniSommet (int n) { // // Initialise les valeurs de la structure sommet
-    sommet* s;
-    s = (sommet*) malloc(n*sizeof(sommet));
-    return s;
-}
-
-void iniEtatSommet (sommet* s, int n) { // Initialise les etats des sommets
+void Sommet::iniEtatSommet () { // Initialise les etats des sommets
     int i;
-    for (i = 0; i < n; i++) {
-        s[i].etat = -1; // Etat non atteint
-        s[i].deb = 0;
-        s[i].fin = 0;
+    for (i = 0; i < m_tailleGraph; i++) {
+        m_tabSommet[i].etat = -1; // Etat non atteint
+        m_tabSommet[i].deb = 0;
+        m_tabSommet[i].fin = 0;
     }
 }
 
-void triDecroissant (sommet* s, int n) { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
+void Sommet::triDecroissant () { // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
     int i, tmp = 0, continuer = 1;
     while (continuer) {
         continuer--;
-        for (i = 0; i < n-1; i++) {
-            if (s[i].fin < s[i+1].fin) {
-                tmp = s[i+1].fin;
-                s[i+1].fin = s[i].fin;
-                s[i].fin = tmp;
+        for (i = 0; i < m_tailleGraph - 1; i++) {
+            if (m_tabSommet[i].fin < m_tabSommet[i+1].fin) {
+                tmp = m_tabSommet[i+1].fin;
+                m_tabSommet[i+1].fin = m_tabSommet[i].fin;
+                m_tabSommet[i].fin = tmp;
 
-                tmp = s[i+1].deb;
-                s[i+1].deb = s[i].deb;
-                s[i].deb = tmp;
+                tmp = m_tabSommet[i+1].deb;
+                m_tabSommet[i+1].deb = m_tabSommet[i].deb;
+                m_tabSommet[i].deb = tmp;
 
-                tmp = s[i+1].num;
-                s[i+1].num = s[i].num;
-                s[i].num = tmp;
+                tmp = m_tabSommet[i+1].num;
+                m_tabSommet[i+1].num = m_tabSommet[i].num;
+                m_tabSommet[i].num = tmp;
                 continuer++;
             }
         }
     }
 }
 
-int getIndice (sommet* s, int n, int x) { // Renvoie l'indice du tableau correspondant a l'id x
+int Sommet::getIndice (int x) { // Renvoie l'indice du tableau correspondant a l'id x
     int i;
-    for (i = 0; i < n; i++) {
-        if (s[i].id == x) {
+    for (i = 0; i < m_tailleGraph; i++) {
+        if (m_tabSommet[i].id == x) {
             return i;
         }
     }
+    //Peut etre -1 non pour signaler qu'il y a une erreur ?? Supposition de PJambet
     return 0;
 }
 
-int getNbCFC (sommet* s, int n) { // Renvoie le nombre de composantes fortement connexes
-    int d = s[0].deb, f = s[0].fin, i, r = 1;
-    for (i = 0; i < n-1; i++) {
-        if (!((d < (s[i+1].deb)) && (f > (s[i+1].fin)))) {
+int Sommet::getNbCFC () { // Renvoie le nombre de composantes fortement connexes
+    int d = m_tabSommet[0].deb, f = m_tabSommet[0].fin, i, r = 1;
+    for (i = 0; i < m_tailleGraph - 1; i++) {
+        if (!((d < (m_tabSommet[i+1].deb)) && (f > (m_tabSommet[i+1].fin)))) {
             r++;
-            d = s[i+1].deb;
-            f = s[i+1].fin;
+            d = m_tabSommet[i+1].deb;
+            f = m_tabSommet[i+1].fin;
         }
     }
     return r;
 }
 
-char* getCFC (sommet* s, int n) { // Renvoie les CFC
-    int d = s[0].deb, f = s[0].fin, i;
-    char* buffer;
-    char* cfc = (char*) malloc (((3*n)+1)*sizeof(char));
-    sprintf(cfc, "%d", s[0].id);
-    for (i = 0; i < n-1; i++) {
-        if ((d < (s[i+1].deb)) && (f > (s[i+1].fin))) {
-            sprintf(buffer, "%d", s[i+1].id);
-            strcat(cfc, ", ");
-            strcat(cfc, buffer);
+string Sommet::getCFC () { // Renvoie les CFC
+    int d = m_tabSommet[0].deb, f = m_tabSommet[0].fin, i;
+    string buffer;
+    string cfc;
+    cfc += m_tabSommet[0].id;
+    for (i = 0; i < m_tailleGraph - 1; i++) {
+        if ((d < (m_tabSommet[i+1].deb)) && (f > (m_tabSommet[i+1].fin))) {
+            buffer += m_tabSommet[i+1].id;
+            cfc += ", ";
+            cfc += buffer;
         } else {
-            d = s[i+1].deb;
-            f = s[i+1].fin;
-            if (i+1 < n) {
-                sprintf(buffer, "%d", s[i+1].id);
-                strcat(cfc, "\n");
-                strcat(cfc, buffer);
+            d = m_tabSommet[i+1].deb;
+            f = m_tabSommet[i+1].fin;
+            if (i+1 < m_tailleGraph) {
+                buffer += m_tabSommet[i+1].id;
+                cfc += "\n";
+                cfc += buffer;
             }
         }
     }
     return cfc;
 }
+
+int Sommet::getTaille (){
+    return m_tailleGraph;
+}
+
+void Sommet::setTaille (int t){
+    m_tailleGraph = t;
+}
+
