@@ -9,8 +9,6 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 ============================================================================= */
 
-#include <iostream>
-#include <string>
 #include "../h/sommet.h"
 
 Sommet::Sommet () : m_tailleGraph(0), m_tabSommet(NULL){
@@ -18,18 +16,24 @@ Sommet::Sommet () : m_tailleGraph(0), m_tabSommet(NULL){
 }
 
 Sommet::Sommet (int taille) : m_tailleGraph(taille) {
-    m_tabSommet = (s_sommet*) malloc( m_tailleGraph * sizeof(s_sommet));
-
+    m_tabSommet = new s_sommet[m_tailleGraph];
+    int i;
+    for (i = 0; i < m_tailleGraph; i++) {
+        m_tabSommet[i].etat = -1; // Etat non atteint
+        m_tabSommet[i].deb = 0;
+        m_tabSommet[i].fin = 0;
+    }
 }
 
 Sommet::~Sommet (){
-
+    delete[] m_tabSommet;
 }
 
 void Sommet::print () {
     int i;
     for (i = 0; i < m_tailleGraph; i++) {
-        cout << "sommet " << m_tabSommet[i].id << " :\n  nom = " << m_tabSommet[i].nom << ", freq = " << m_tabSommet[i].freq << ", d(" << m_tabSommet[i].deb << "), f(" << m_tabSommet[i].fin << ")" << endl;
+        cout << "sommet " << m_tabSommet[i].id << " :\n  nom = " << m_tabSommet[i].nom
+        << ", freq = " << m_tabSommet[i].freq << ", d(" << m_tabSommet[i].deb << "), f(" << m_tabSommet[i].fin << ")" << endl;
     }
 }
 
@@ -92,6 +96,12 @@ int Sommet::getIndice (int x) { // Renvoie l'indice du tableau correspondant a l
     return 0;
 }
 
+s_sommet Sommet::getStructSommet (int x){
+    if ((x >= 0) && (x < m_tailleGraph)){
+        return m_tabSommet[x];
+    }
+}
+
 int Sommet::getNbCFC () { // Renvoie le nombre de composantes fortement connexes
     int d = m_tabSommet[0].deb, f = m_tabSommet[0].fin, i, r = 1;
     for (i = 0; i < m_tailleGraph - 1; i++) {
@@ -133,5 +143,73 @@ int Sommet::getTaille (){
 
 void Sommet::setTaille (int t){
     m_tailleGraph = t;
+    delete[] m_tabSommet;
+    m_tabSommet = new s_sommet[m_tailleGraph];
 }
+
+void Sommet::setEtat(int i, int e){
+    m_tabSommet[i].etat = e;
+}
+
+int Sommet::getEtat(int i){
+    return m_tabSommet[i].etat;
+}
+
+void Sommet::setNom(int i, string n){
+    m_tabSommet[i].nom = n;
+}
+
+string Sommet::getNom(int i){
+    return m_tabSommet[i].nom;
+}
+
+void Sommet::setDeb(int i, int d){
+    m_tabSommet[i].deb = d;
+}
+
+
+int Sommet::getDeb(int i){
+    return m_tabSommet[i].deb;
+}
+
+
+void Sommet::setFin(int i, int f){
+    m_tabSommet[i].fin = f;
+}
+
+
+int Sommet::getFin(int i){
+    return m_tabSommet[i].fin;
+}
+
+
+void Sommet::setNum(int i, int n){
+    m_tabSommet[i].num = n;
+}
+
+
+int Sommet::getNum(int i){
+    return m_tabSommet[i].num;
+}
+
+
+void Sommet::setId(int i, int id){
+    m_tabSommet[i].id = id;
+}
+
+
+int Sommet::getId(int i){
+    return m_tabSommet[i].id;
+}
+
+
+void Sommet::setFreq(int i, int f){
+    m_tabSommet[i].freq = f;
+}
+
+int Sommet::getFreq(int i){
+    return m_tabSommet[i].freq;
+}
+
+
 

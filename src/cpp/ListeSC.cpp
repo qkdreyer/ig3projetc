@@ -37,6 +37,14 @@ p_Node ListeSC::getNext(p_Node c){
   return c->getNext();
 }
 
+void ListeSC::print(){
+    p_Node temp;
+    temp = m_head;
+    while (temp != NULL){
+        cout << temp->getVal() << endl;
+    }
+}
+
 void ListeSC::addAfter(p_Node c, int v){
 
 }

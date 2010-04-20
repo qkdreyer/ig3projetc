@@ -13,7 +13,8 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 #include "../h/node.h"
 
-Node::Node() : m_next(NULL){
+//Par défault la valeur d'initialisation d'une cellule de la liste est 0
+Node::Node() : m_next(NULL), m_val(0) {
 
 }
 
@@ -23,17 +24,21 @@ Node::~Node(){
 
 /*ACCESSEURS*/
 Node* Node::getNext(){
-  return m_next;
+    return m_next;
 }
 
 void Node::setNext(Node* n){
-  m_next = n;
+    m_next = n;
 }
 
 int Node::getVal(){
-  return m_val;
+    return m_val;
 }
 
 void Node::setVal(int v){
-  m_val = v;
+    m_val = v;
+}
+
+void Node::print(){
+    cout << m_val;
 }
