@@ -9,117 +9,137 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 ============================================================================= */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
 #include "../h/sommet.h"
 #include "../h/matAdj.h"
 
-int** iniMat (int n) { // Renvoie la matrice d'adjacence
-    int i, j;
-    int** M = (int**) malloc(n*sizeof(int));
-    for (i = 0; i < n; i++) {
-        M[i] = (int*) malloc(n*sizeof(int));
-    }
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            M[j][i] = 0;
-        }
-    }
-    return M;
+MatAdj::MatAdj() : m_size(0), m_Matrix(NULL){
+
 }
 
-void printMat (int** M, int n) { // Affiche la matrice adjacente
-    int i, j;
-    printf("\n");
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            printf("%d  ", M[i][j]);
-        }
-        printf("\n");
+
+MatAdj::MatAdj(int s) : m_size(s) {
+    int i = 0;
+    m_Matrix = new int*[m_size];
+    for (i = 0; i < m_size; i++){
+        m_Matrix[i] = new int[m_size];
     }
-    printf("\n");
 }
 
-void PPG (int** M, sommet* s, int n) { // Parcours en profondeur du graphe (appel sur PProfG)
+
+MatAdj::~MatAdj() {
+    int i = 0;
+    for (i = 0; i < m_size; i++){
+        delete m_Matrix[i];
+    }
+    delete[] m_Matrix;
+}
+
+
+void MatAdj::iniMat () { // Renvoie la matrice d'adjacence
+    int i, j;
+    m_Matrix = new int*[m_size];
+    for (i = 0; i < m_size; i++){
+        m_Matrix[i] = new int[m_size];
+    }
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
+            m_Matrix[j][i] = 0;
+        }
+    }
+}
+
+void MatAdj::printMat () { // Affiche la matrice adjacente
+    int i, j;
+    cout << endl;
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
+            cout << m_Matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+void MatAdj::PPG (Sommet* s) { // Parcours en profondeur du graphe (appel sur PProfG)
     int i;
     int temps = 0;
     int* t = &temps;
-    iniEtatSommet(s, n);
-    for (i = 0; i < n; i++) {
-        if (s[s[i].num].etat == -1) {
-            PProfG(M, s, n, s[i].num, t);
+    s->iniEtatSommet();
+    for (i = 0; i < m_size; i++) {
+        if ( s->getEtat(s->getNum(i)) == -1 ){ // version c de quentin : s[s[i].num].etat == -1)
+            PProfG(s, s->getNum(i), t);
         }
     }
-    triDecroissant(s, n);
+    s->triDecroissant();
 }
 
-void PProfG (int** M, sommet* s, int n, int i, int* t) { // Parcours en profondeur du graphe (recursif)
+void MatAdj::PProfG (Sommet* s, int i, int* t) { // Parcours en profondeur du graphe (recursif)
     int j;
-    s[i].etat = 0; // Etat atteint
+    s->setEtat(i, 0); // Etat atteint
     (*t)++;
-    s[i].deb = *t;
-    for (j = 0; j < n; j++) {
-        if ((M[i][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProfG(M, s, n, j, t);
+    s->setDeb(i, *t);
+    for (j = 0; j < m_size; j++) {
+        if ((m_Matrix[i][j] > 0) && (s->getEtat(j) == -1)) { // Successeur non atteint
+            PProfG(s, j, t);
         }
     }
-    s[i].etat = 1; // Etat explore
+    s->setEtat(i, 1); // Etat explore
     (*t)++;
-    s[i].fin = *t;
+    s->setFin(i, *t);
 }
 
-void PPGD (int** M, sommet* s, int n) { // Parcours en profondeur du graphe dual (appel sur PProfG)
+void MatAdj::PPGD (Sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfG)
     int i;
     int temps = 0;
     int* t = &temps;
-    iniEtatSommet(s, n);
-    for (i = 0; i < n; i++) {
-        if (s[s[i].num].etat == -1) {
-            PProfGD(M, s, n, s[i].num, t);
+    s->iniEtatSommet();
+    for (i = 0; i < m_size; i++) {
+        if (s->getEtat(s->getNum(i)) == -1) {
+            PProfGD(s, s->getNum(i), t);
         }
     }
 }
 
-void PProfGD (int** M, sommet* s, int n, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
+void MatAdj::PProfGD (Sommet* s, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
     int j;
-    s[i].etat = 0; // Etat atteint
+    s->setEtat(i, 0); // Etat atteint
     (*t)++;
-    s[i].deb = *t;
-    for (j = 0; j < n; j++) {
-        if ((M[j][i] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-            PProfGD(M, s, n, j, t);
+    s->setDeb(i, *t);
+    for (j = 0; j < m_size; j++) {
+        if ((m_Matrix[j][i] > 0) && (s->getEtat(j) == -1)) { // Successeur non atteint
+            PProfGD( s, j, t);
         }
     }
-    s[i].etat = 1; // Etat explore
+    s->setEtat(i, 1); // Etat explore
     (*t)++;
-    s[i].fin = *t;
+    s->setFin(i,*t);
 }
 
-int getTMin (int** M, sommet* s, int n, int x, int y) { // Renvoie le temps min pour aller de x à y
+int MatAdj::getTMin (Sommet* s, int x, int y) { // Renvoie le temps min pour aller de x à y
     int t;
     int* tmin = &t;
-    x = getIndice(s, n, x);
-    y = getIndice(s, n, y);
-    t = - s[x].freq;
-    iniEtatSommet(s, n);
-    getTMinProf(M, s, n, x, y, tmin, t);
+    x = s->getIndice(x);
+    y = s->getIndice(y);
+    t = - s->getFreq(x);
+    s->iniEtatSommet();
+    getTMinProf(s, x, y, tmin, t);
     return *tmin;
 }
 
-void getTMinProf (int** M, sommet* s, int n, int x, int y, int* t, int temp) { // Parcours en profondeur
+void MatAdj::getTMinProf (Sommet* s, int x, int y, int* t, int temp) { // Parcours en profondeur
     int j;
-    s[x].etat = 0; // Etat atteint
-    printf("s = %d (%d), t = %d\n", x+1, s[x].id, temp);
-    temp += s[x].freq;
+    s->setEtat(x,0); // Etat atteint
+    cout << "s = " << (x + 1) << " (" << s->getId(x) << "), t = " << temp << endl;
+    temp += s->getFreq(x);
     if (x == y) {
         *t = temp;
     } else {
-        for (j = 0; j < n; j++) {
-            if ((M[x][j] > 0) && (s[j].etat == -1)) { // Successeur non atteint
-                getTMinProf(M, s, n, j, y, t, temp);
+        for (j = 0; j < m_size; j++) {
+            if ((m_Matrix[x][j] > 0) && (s->getEtat(j) == -1)) { // Successeur non atteint
+                getTMinProf(s, j, y, t, temp);
             }
         }
     }
-    s[x].etat = 1; // Etat explore
+    s->setEtat(x, 1); // Etat explore
 }

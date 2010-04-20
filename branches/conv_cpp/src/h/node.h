@@ -13,26 +13,29 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #define NODE_H_INCLUDED
 
 #include <iostream>
+#include <string>
+using namespace std;
 
 class Node{
 
-  public :
+    public :
 
-  Node();
-  ~Node();
+    Node();
+    ~Node();
 
-  /*ACCESSEURS*/
-  Node* getNext();
-  void setNext(Node* n);
-  int getVal();
-  void setVal(int v);
+    /*ACCESSEURS*/
+    Node* getNext();
+    void setNext(Node* n);
+    int getVal();
+    void setVal(int v);
+    void print();
 
-  private :
+    private :
 
-  int m_val;
-  Node* m_next;
-
+    int m_val;
+    Node* m_next;
 
 };
+
 
 #endif
