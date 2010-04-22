@@ -53,8 +53,8 @@ void ListeVoisins::iniData(UserData u){
 
 
 void ListeVoisins::addSummit(int i, int x){
-    m_graph[i].push_back(x);
-    m_tailleGraph++;
+    m_graph[i].push_back(x); // On rajoute le sommet x dans les voisins de i
+    m_graphDual[x].push_back(i); // On fait l'inverse pour obtenir le graphe dual
 }
 
 
@@ -72,6 +72,23 @@ void ListeVoisins::printListeAdj () {
 }
 
 
+void ListeVoisins::printListeAdjD () {
+    int i;
+    vector <int>::iterator it;
+    for (i = 0; i < m_tailleGraph; i++) {
+        printf("%d ", i+1);
+        for(it = m_graphDual[i].begin(); it < m_graphDual[i].end(); it++){
+            cout << "-> " << ( (*it) + 1 );
+        }
+        cout << endl;
+    }
+    printf("\n");
+}
+
+void ListeVoisins::printSummits () {
+    m_summit->print();
+}
+
 void ListeVoisins::PPG () { // Parcours en profondeur du graphe (appel sur PProfG)
     int i;
     int temps = 0;
@@ -88,9 +105,9 @@ void ListeVoisins::PPG () { // Parcours en profondeur du graphe (appel sur PProf
 
 void ListeVoisins::PProfG (int i, int* t) { // Parcours en profondeur du graphe (recursif)
     vector <int>::iterator it;
-    m_summit->getStructSommet(i).etat = 0; // Etat atteint
+    m_summit->setEtat(i, 0); // Etat atteint
     (*t)++;
-    m_summit->getStructSommet(i).deb = *t;
+    m_summit->setDeb(i, *t);
     for ( it = m_graph[i].begin(); it < m_graph[i].end(); it++){
         if (m_summit->getEtat(*it) == -1) {
             PProfG(*it, t);
@@ -118,9 +135,9 @@ void ListeVoisins::PProfGD (int i, int* t) { // Parcours en profondeur du graphe
     m_summit->setEtat(i, 0); // Etat atteint
     (*t)++;
     m_summit->setDeb(i ,*t);
-    for ( it = m_graph[i].begin(); it < m_graph[i].end(); it++){
+    for ( it = m_graphDual[i].begin(); it < m_graphDual[i].end(); it++){
         if (m_summit->getEtat(*it) == -1) {
-            PProfG(*it, t);
+            PProfGD(*it, t);
         }
     }
     m_summit->setEtat(i, 1); // Etat explore
@@ -134,11 +151,12 @@ int ListeVoisins::getTaille(){
 }
 
 
-//void ListeVoisins::setTaille(int t){
-    //m_tailleGraph = t;
+void ListeVoisins::setTaille(int t){
+    m_tailleGraph = t;
+    setSummitSize(t);
     //delete[] m_graph;
   //  m_graph = new vector <int> [t];
-//}
+}
 
 void ListeVoisins::setSummitEtat (int i, int e) {
     m_summit->setEtat(i, e);
@@ -153,7 +171,6 @@ void ListeVoisins::setSummitNum (int i, int n) {
 }
 
 void ListeVoisins::setSummitId (int i, int id) {
-    cout << "ibis : " << i << endl;
     m_summit->setId(i, id);
 }
 

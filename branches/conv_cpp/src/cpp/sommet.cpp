@@ -116,20 +116,27 @@ int Sommet::getNbCFC () { // Renvoie le nombre de composantes fortement connexes
 }
 
 string Sommet::getCFC () { // Renvoie les CFC
+    std::ostringstream oss;
     int d = m_tabSommet[0].deb, f = m_tabSommet[0].fin, i;
-    string buffer;
-    string cfc;
-    cfc += m_tabSommet[0].id;
+    string buffer = "";
+    string cfc = "";
+    oss << m_tabSommet[0].id;
+    buffer = oss.str();
+    cfc = buffer;
     for (i = 0; i < m_tailleGraph - 1; i++) {
         if ((d < (m_tabSommet[i+1].deb)) && (f > (m_tabSommet[i+1].fin))) {
-            buffer += m_tabSommet[i+1].id;
+            oss.str("");
+            oss << m_tabSommet[i+1].id;
+            buffer = oss.str();
             cfc += ", ";
             cfc += buffer;
         } else {
             d = m_tabSommet[i+1].deb;
             f = m_tabSommet[i+1].fin;
             if (i+1 < m_tailleGraph) {
-                buffer += m_tabSommet[i+1].id;
+                oss.str("");
+                oss <<m_tabSommet[i+1].id;
+                buffer = oss.str();
                 cfc += "\n";
                 cfc += buffer;
             }
@@ -157,7 +164,6 @@ int Sommet::getEtat(int i){
 }
 
 void Sommet::setNom(int i, string n){
-    cout << "Nouveau nom : " << n;
     m_tabSommet[i].nom = n;
 }
 
@@ -196,7 +202,6 @@ int Sommet::getNum(int i){
 
 
 void Sommet::setId(int i, int id){
-    cout << "iter : " << i << endl;
     m_tabSommet[i].id = id;
 }
 

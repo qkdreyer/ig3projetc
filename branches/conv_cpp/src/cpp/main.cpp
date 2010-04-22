@@ -20,7 +20,6 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 int main(int argc, char* argv[]) {
 
     int i, n, m, temp = 0, x = 0, y = 0;
-    int it = 0;
     char *nom_in, *nom_out, dir_in[6] = "test/", dir_out[6] = "test/", *buffer, typestruct;
     string string_CFC, string_nom;
     ListeVoisins L, P;
@@ -28,7 +27,7 @@ int main(int argc, char* argv[]) {
     //sommet* s, *d;
     FILE* fic_in, *fic_out;
 
-    typestruct = 'm'; // Choix de la structure, m pour matrice, l pour liste
+    typestruct = 'l'; // Choix de la structure, m pour matrice, l pour liste
     nom_in = (char*) malloc(16*sizeof(char));
     nom_out = (char*) malloc(16*sizeof(char));
 
@@ -55,7 +54,7 @@ int main(int argc, char* argv[]) {
 
         fscanf(fic_in, "%d\n", &n); // lecture du nombre de sommets du graphe
         i = 0;
-        L.setSummitSize(n);
+        L.setTaille(n);
         //s = iniSommet(n);
         //d = iniSommet(n);
         //M = iniMat(n);
@@ -66,10 +65,10 @@ int main(int argc, char* argv[]) {
             fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);
             cout << "buffer : " << buffer << endl;
             cout << "m_tailleGraph : " << L.getSummitSize() << endl;
-            string s("Toto");
-            //L.setSummitNom(i, s);
+            L.setSummitNom(i, buffer);
             L.setSummitId(i, x);
             L.setSummitFreq(i, y);
+            L.setSummitNum(i, i);
 
             //strcpy(s[i].nom, buffer);
             //s[i].num = i;
@@ -79,6 +78,7 @@ int main(int argc, char* argv[]) {
             //d[i].freq = y;
             i++;
         }
+        L.printSummits();
 
         fscanf(fic_in, "%d\n", &m); // lecture du nombre de sommets du graphe
         i = 0;
@@ -90,11 +90,15 @@ int main(int argc, char* argv[]) {
                 //M[x][y] = 1; // remplissage de la matrice d'adjacence M
             } else if (typestruct == 'l') {
                 L.addSummit(x, y);
+                //P.addSummit(y, x);
                 //ajoutFin(L, x, y); // creation de la liste d'adjacence L
                 //ajoutFin(P, y, x); // creation de la liste duale d'adjacence P
             }
             i++;
         }
+        cout << "CHECK : " << endl;
+        L.printListeAdj();
+        L.printListeAdjD();
 
         if (typestruct == 'm') { // Matrice
 
@@ -104,9 +108,13 @@ int main(int argc, char* argv[]) {
         } else if (typestruct == 'l') { // Liste
 
             L.PPG();
+            L.PPGD();
             //PPGD(P, s, n);
 
         }
+        cout << "CHECK : " << endl;
+        L.printSummits();
+        cout << endl << endl;
 
         fic_out = fopen(dir_out, "w+"); // traiement du fichier resultat
         temp = L.getNbCFC(); // recuperation du nombre de cfc
@@ -138,5 +146,7 @@ int main(int argc, char* argv[]) {
     } else {
         printf("Lecture du fichier impossible\n");
     }
+    system("PAUSE");
+    return 0;
 
 }
