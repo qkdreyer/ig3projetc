@@ -50,9 +50,12 @@ class Sommet{
     void iniEtatSommet (); // Initialise les etats des sommets
     void triDecroissant (); // Renvoie l'ordre de parcours de la matrice duale (trié par ordre décroissant des temps d'accès finaux)
     int getIndice (int x); // Renvoie l'indice du tableau correspondant a l'id x
+    int getIndiceMinDeb (); // Renvoie l'indice du plus petit d(x)
     s_sommet getStructSommet (int x); // Renvoie la struct_sommet(s_sommet) qui est a l'indice x du tableau m_tabSommet
     int getNbCFC (); // Renvoie le nombre de composantes fortement connexes
     string getCFC (); // Renvoie les CFC
+    bool nonExplore (); // Renvoie vrai s'il reste un sommet non exploré
+    char* getCheminMin (int y); // Renvoie le temps et le plus cours chemin jusqu'à y
 
     //Accesseurs
     s_sommet getTabSommet ();
