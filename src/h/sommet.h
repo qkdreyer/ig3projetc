@@ -13,6 +13,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #define SOMMET_H_INCLUDED
 
 #include <iostream>
+#include <sstream>
 #include <string>
 using namespace std;
 

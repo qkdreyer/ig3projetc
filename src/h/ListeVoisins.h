@@ -29,6 +29,7 @@ class ListeVoisins{
     /* Le graph est représenté par un tableau de vecteur d'entier
        on stocke aussi la taille du graphe*/
     map < int, vector <int> > m_graph;
+    map < int, vector <int> > m_graphDual;
     int m_tailleGraph;
     Sommet* m_summit;
 
@@ -45,6 +46,8 @@ class ListeVoisins{
     void addSummit(int i, int x); // Ajoute l'element x dans la liste(vecteur) graph[i]
     void lscAdjCFC (char* a, int n); // Renvoie les composantes fortement connexes du graphe
     void printListeAdj (); // Affiche la liste adjacente
+    void printListeAdjD ();// Affiche la liste adjacente duale
+    void printSummits(); // Affiche les infos des sommets
     void PPG (); // Parcours en profondeur du graphe (appel sur PProfG)
     void PProfG (int i, int* t); // Parcours en profondeur du graphe (recursif)
     void PPGD (); // Parcours en profondeur du graphe dual (appel sur PProfGD)
