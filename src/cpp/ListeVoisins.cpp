@@ -145,6 +145,31 @@ void ListeVoisins::PProfGD (int i, int* t) { // Parcours en profondeur du graphe
     m_summit->setFin(i, *t);
 }
 
+void ListeVoisins::algoDijkstra (int x) { // Calcule les plus courts chemins à partir de x
+    int i, z;
+    vector <int>::iterator it;
+    m_summit->iniEtatSommet(); // F = X
+    for (i = 0; i < m_tailleGraph; i++) { // Source Unique Initialisation
+        m_summit->setDeb(i, INT_MAX);
+        m_summit->setFin(i, -1);
+    }
+    x = getIndice(x);
+    z = x;
+    m_summit->setDeb(x, 0);
+    while (m_summit->nonExplore() == true) { // F != null
+        x = m_summit->getIndiceMinDeb(); // x = ExtraireMin(F)
+        m_summit->setEtat(x, 0); // F = F - x
+        for ( it = m_graph[x].begin(); it < m_graph[x].end(); it++){
+            if (m_summit->getDeb(*it) > m_summit->getDeb(x) + m_summit->getFreq(*it)) { // Relacher
+                //printf("relacher(%d, %d) : %d > %d + %d => d(%d) = %d\n", d[x].id, d[y].id, d[y].deb, d[x].deb, d[y].freq, d[y].id, d[x].deb+d[y].freq);
+                m_summit->setDeb(*it, m_summit->getDeb(x) + m_summit->getFreq(*it));
+                x = getIndice(m_summit->getId(x));
+                m_summit->setFin(*it, x);
+            }
+        }
+    }
+}
+
 
 int ListeVoisins::getTaille(){
     return m_tailleGraph;
@@ -188,10 +213,14 @@ int ListeVoisins::getIndice (int x) {
     return m_summit->getIndice(x);
 }
 
-int ListeVoisins::getNbCFC(){
+int ListeVoisins::getNbCFC (){
     return m_summit->getNbCFC();
 }
 
-string ListeVoisins::getCFC(){
+string ListeVoisins::getCFC (){
     return m_summit->getCFC();
+}
+
+char* ListeVoisins::getCheminMin (int y) {
+    return m_summit->getCheminMin(y);
 }

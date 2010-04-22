@@ -52,7 +52,7 @@ class ListeVoisins{
     void PProfG (int i, int* t); // Parcours en profondeur du graphe (recursif)
     void PPGD (); // Parcours en profondeur du graphe dual (appel sur PProfGD)
     void PProfGD (int i, int* t); // Parcours en profondeur du graphe dual (recursif)
-
+    void algoDijkstra (int x); // Calcule les plus courts chemins à partir de x
 
     /* Accesseurs */
     int getTaille();
@@ -68,6 +68,7 @@ class ListeVoisins{
     int getIndice (int x); // Renvoie l'indice du tableau correspondant a l'id x
     int getNbCFC (); // Renvoie le nombre de composantes fortement connexes
     string getCFC (); // Renvoie les CFC
+    char* getCheminMin(int y);
 
 };
 

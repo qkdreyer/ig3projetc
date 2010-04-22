@@ -20,36 +20,34 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 int main(int argc, char* argv[]) {
 
     int i, n, m, temp = 0, x = 0, y = 0;
-    char *nom_in, *nom_out, dir_in[6] = "test/", dir_out[6] = "test/", *buffer, typestruct;
-    string string_CFC, string_nom;
+    char *buffer, typestruct;
+    string string_CFC, string_nom, nom_in, nom_out, dir_in, dir_out;
+    dir_in = "test/";dir_out = "test/";
     ListeVoisins L, P;
     MatAdj M;
-    //sommet* s, *d;
     FILE* fic_in, *fic_out;
 
     typestruct = 'l'; // Choix de la structure, m pour matrice, l pour liste
-    nom_in = (char*) malloc(16*sizeof(char));
-    nom_out = (char*) malloc(16*sizeof(char));
 
     if (argc > 2) { // s'il y a 2 arguments, on les utilise comme noms de fichiers d'entrée et de sortie
         nom_in = argv[1];
         nom_out = argv[2];
     } else if (argc > 1) { // s'il n'y a qu'un seul argument, le fichier de sortie sera argv[1].res
         nom_in = argv[1];
-        strcpy(nom_out, nom_in);
-        strcat(nom_out, ".res");
+        nom_out = nom_in;
+        nom_out += ".res";
     } else { // s'il n'y a pas d'argument, on demande à l'utilisateur d'entrer les noms des fichiers d'entrée et de sortie
-        printf("Entrez le nom du graphe.\n");
-        scanf("%s", nom_in);
-        printf("Entrez le nom du fichier resultat.\n");
-        scanf("%s", nom_out);
-        printf("\n");
+        cout << "Entrez le nom du graphe." << endl;
+        cin >> nom_in;
+        cout << "Entrez le nom du fichier resultat." << endl;
+        cin >> nom_out;
+        cout << endl;
     }
 
-    strcat(dir_in, nom_in); // concaténation du repertoire test avec le nom du fichier d'entrée
-    strcat(dir_out, nom_out); // concaténation du repertoire test avec le nom du fichier de sortie
+    dir_in += nom_in; // concaténation du repertoire test avec le nom du fichier d'entrée
+    dir_out += nom_out; // concaténation du repertoire test avec le nom du fichier de sortie
 
-    fic_in = fopen(dir_in, "r");
+    fic_in = fopen(dir_in.c_str(), "r");
     if (fic_in != NULL) { // lecture du graphe
 
         fscanf(fic_in, "%d\n", &n); // lecture du nombre de sommets du graphe
@@ -63,8 +61,6 @@ int main(int argc, char* argv[]) {
         buffer = (char*) malloc(1000*sizeof(char));
         while (i < n) { // lecture des id / nom / frequence
             fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);
-            cout << "buffer : " << buffer << endl;
-            cout << "m_tailleGraph : " << L.getSummitSize() << endl;
             if (typestruct = 'l') {
                 L.setSummitNom(i, buffer);
                 L.setSummitId(i, x);
@@ -109,7 +105,7 @@ int main(int argc, char* argv[]) {
 
         }
 
-        fic_out = fopen(dir_out, "w+"); // traiement du fichier resultat
+        fic_out = fopen(dir_out.c_str(), "w+"); // traiement du fichier resultat
         temp = L.getNbCFC(); // recuperation du nombre de cfc
         fprintf(fic_out, "%d\n", temp);
         string_CFC = L.getCFC(); // recuperation des cfc
@@ -122,14 +118,17 @@ int main(int argc, char* argv[]) {
             if (x != temp) {
                 temp = x;
                 if (typestruct == 'm') {
+                    //TODO
                     //algoDijkstra(M, d, n, x);
                 } else if (typestruct == 'l') {
-                    //algoDijkstra(L, d, n, x);
+                    //TODO
+                    L.algoDijkstra(x);
                 }
             }
-            //y = getIndice(s, n, y);
-            //buffer = getCheminMin(d, n, y);
-            //fprintf(fic_out, "%s", buffer);
+            //TODO
+            y = L.getIndice(y);
+            buffer = L.getCheminMin(y);
+            fprintf(fic_out, "%s", buffer);
             i++;
         }
 

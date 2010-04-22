@@ -97,6 +97,20 @@ int Sommet::getIndice (int x) { // Renvoie l'indice du tableau correspondant a l
     return 0;
 }
 
+int Sommet::getIndiceMinDeb () { // Renvoie l'indice du plus petit d(x)
+    int i, imin, min = INT_MAX;
+    for (i = 0; i < m_tailleGraph; i++) {
+        if ((m_tabSommet[i].deb < min) && (m_tabSommet[i].etat == -1)) {
+            min = m_tabSommet[i].deb;
+            imin = i;
+        }
+    }
+    if (imin != INT_MAX)
+        return imin;
+    else
+        return 0;
+}
+
 s_sommet Sommet::getStructSommet (int x){
     if ((x >= 0) && (x < m_tailleGraph)){
         return m_tabSommet[x];
@@ -146,6 +160,55 @@ string Sommet::getCFC () { // Renvoie les CFC
         }
     }
     return cfc;
+}
+
+bool Sommet::nonExplore () { // Renvoie vrai s'il reste un sommet non exploré
+    int i;
+    for (i = 0; i < m_tailleGraph; i++) {
+        if ((m_tabSommet[i].etat == -1) && (m_tabSommet[i].deb != INT_MAX))
+            return true;
+    }
+    return false;
+}
+
+char* Sommet::getCheminMin (int y) {
+    int i, j, k, p, l, m;
+    char temp;
+    char* buffer = (char*) malloc(5*m_tailleGraph*sizeof(char));
+    char* chemin = (char*) malloc(5*m_tailleGraph*sizeof(char));
+    sprintf(chemin, "%d : ", m_tabSommet[y].deb);
+    strcpy(buffer, chemin);
+    m = strlen(buffer);
+    while (y != -1) {
+        sprintf(chemin, "%d, ", m_tabSommet[y].id);
+        strcat(buffer, chemin);
+        y = m_tabSommet[y].fin;
+    }
+    p = strlen(buffer);
+    strcpy(chemin, buffer);
+    i = m;
+    while (i < p) { // inversion de l'ordre (fonction super bordelique!)
+        l = 0;
+        while (buffer[i] != ' ') {
+            i++;
+            l++;
+        }
+        i = i-l;
+        l++;
+        k = 0;
+        j = p-l-i;
+        while (k < l) {
+            //printf("Var : (l=%d p=%d i=%d), chemin[%d] = %c\n", l, p, i, j+m, buffer[i]);
+            chemin[j+m] = buffer[i];
+            i++;
+            k++;
+            j++;
+        }
+    }
+    chemin[p-2] = '\0'; // on elève la dernière virgule et le dernier espace
+    strcat(chemin, "\n");
+    free(buffer);
+    return chemin;
 }
 
 int Sommet::getTaille (){
