@@ -38,11 +38,12 @@ class Sommet{
 
     public :
 
-    //Methodes
+    /* Constructeurs & Destructeurs */
     Sommet();
     Sommet(int taille);
     ~Sommet();
 
+    //Methodes
     void print (); // Affiche les informations des sommets
     void printCFC (); // Affiche les CFC
     void iniEtatSommet (); // Initialise les etats des sommets
@@ -53,11 +54,13 @@ class Sommet{
     string getCFC (); // Renvoie les CFC
 
     //Accesseurs
-    int getTaille ();
-    void setTaille (int t);
     s_sommet getTabSommet ();
     void setTabSommet (s_sommet* t);
+    int getTaille ();
+    void setTaille (int t);
 
+    /* Accesseurs aux elements de la structure */
+    /* Le parametre "i" correspond a l'indice du tableau m_tabSommet */
     void setEtat(int i, int e);
     int getEtat(int i);
     void setDeb(int i, int d);

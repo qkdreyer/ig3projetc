@@ -53,6 +53,7 @@ void Sommet::printCFC () {
     cout << "}.\n";
 }
 
+
 void Sommet::iniEtatSommet () { // Initialise les etats des sommets
     int i;
     for (i = 0; i < m_tailleGraph; i++) {
@@ -156,6 +157,7 @@ int Sommet::getEtat(int i){
 }
 
 void Sommet::setNom(int i, string n){
+    cout << "Nouveau nom : " << n;
     m_tabSommet[i].nom = n;
 }
 
@@ -194,6 +196,7 @@ int Sommet::getNum(int i){
 
 
 void Sommet::setId(int i, int id){
+    cout << "iter : " << i << endl;
     m_tabSommet[i].id = id;
 }
 

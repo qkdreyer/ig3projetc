@@ -11,24 +11,50 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 
 #include "../h/ListeVoisins.h"
 
-ListeVoisins::ListeVoisins() : m_graph(0), m_tailleGraph(0){
-
+ListeVoisins::ListeVoisins () : m_tailleGraph(0){
+    m_summit = new Sommet();
 }
 
-ListeVoisins::ListeVoisins(int taille) : m_tailleGraph(taille){
+ListeVoisins::ListeVoisins (UserData u){
+    map < int, Person >::iterator it_UserData;
+    m_summit = new Sommet();
+    //On recopie dans le map (m_graph) la liste de voisins que l'on obtient a partir du userData
+    for (it_UserData=u.get_listPerson().begin(); it_UserData != u.get_listPerson().end(); it_UserData++){
+        m_graph[it_UserData->first] = it_UserData->second.get_listLink() ;
+        m_tailleGraph++;
+    }
+    m_summit->setTaille(m_tailleGraph);
+}
+
+//ListeVoisins::ListeVoisins(int taille) : m_tailleGraph(taille){
     //int i = 0;
-    m_graph = new vector <int>[m_tailleGraph];
-}
+    //m_graph = new vector <int>[m_tailleGraph];
+//}
 
 
 ListeVoisins::~ListeVoisins(){
-    //TODO
-    delete[] m_graph;
+    delete m_summit;
+}
+
+ListeVoisins ListeVoisins::toDual(){
+
+ return *(this);
+}
+
+void ListeVoisins::iniData(UserData u){
+    map < int, Person >::iterator it_UserData;
+    //On recopie dans le map (m_graph) la liste de voisins que l'on obtient a partir du userData
+    for (it_UserData=u.get_listPerson().begin(); it_UserData != u.get_listPerson().end(); it_UserData++){
+        m_graph[it_UserData->first] = it_UserData->second.get_listLink() ;
+        m_tailleGraph++;
+    }
+    m_summit->setTaille(m_tailleGraph);
 }
 
 
 void ListeVoisins::addSummit(int i, int x){
     m_graph[i].push_back(x);
+    m_tailleGraph++;
 }
 
 
@@ -46,60 +72,60 @@ void ListeVoisins::printListeAdj () {
 }
 
 
-void ListeVoisins::PPG (Sommet* s) { // Parcours en profondeur du graphe (appel sur PProfG)
+void ListeVoisins::PPG () { // Parcours en profondeur du graphe (appel sur PProfG)
     int i;
     int temps = 0;
     int* t = &temps;
-    s->iniEtatSommet();
+    m_summit->iniEtatSommet();
     for (i = 0; i < m_tailleGraph; i++) {
-        if (s->getEtat(s->getNum(i)) == -1) { // ancienne version : s->getStructSommet(s->getStructSommet(i).num).etat
-            PProfG(s, s->getNum(i), t);
+        if (m_summit->getEtat(m_summit->getNum(i)) == -1) { // ancienne version : s->getStructSommet(s->getStructSommet(i).num).etat
+            PProfG(m_summit->getNum(i), t);
         }
     }
-    s->triDecroissant();
+    m_summit->triDecroissant();
 }
 
 
-void ListeVoisins::PProfG (Sommet* s, int i, int* t) { // Parcours en profondeur du graphe (recursif)
+void ListeVoisins::PProfG (int i, int* t) { // Parcours en profondeur du graphe (recursif)
     vector <int>::iterator it;
-    s->getStructSommet(i).etat = 0; // Etat atteint
+    m_summit->getStructSommet(i).etat = 0; // Etat atteint
     (*t)++;
-    s->getStructSommet(i).deb = *t;
+    m_summit->getStructSommet(i).deb = *t;
     for ( it = m_graph[i].begin(); it < m_graph[i].end(); it++){
-        if (s->getStructSommet(*it).etat == -1) {
-            PProfG(s, *it, t);
+        if (m_summit->getEtat(*it) == -1) {
+            PProfG(*it, t);
         }
     }
-    s->getStructSommet(i).etat = 1; // Etat explore
+    m_summit->setEtat(i,1); // Etat explore
     (*t)++;
-    s->getStructSommet(i).fin = *t;
+    m_summit->setFin(i,*t);
 }
 
 
-void ListeVoisins::PPGD (Sommet* s) { // Parcours en profondeur du graphe dual (appel sur PProfGD)
+void ListeVoisins::PPGD () { // Parcours en profondeur du graphe dual (appel sur PProfGD)
     int i;
     int temps = 0;
     int* t = &temps;
-    s->iniEtatSommet();
+    m_summit->iniEtatSommet();
     for (i = 0; i < m_tailleGraph; i++) {
-        if (s->getStructSommet(s->getStructSommet(i).num).etat == -1) {
-            PProfGD(s, s->getStructSommet(i).num, t);
+        if (m_summit->getEtat(m_summit->getNum(i)) == -1) {
+            PProfGD(m_summit->getNum(i), t);
         }
     }
 }
-void ListeVoisins::PProfGD (Sommet* s, int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
+void ListeVoisins::PProfGD (int i, int* t) { // Parcours en profondeur du graphe dual (recursif)
     vector <int>::iterator it;
-    s->getStructSommet(i).etat = 0; // Etat atteint
+    m_summit->setEtat(i, 0); // Etat atteint
     (*t)++;
-    s->getStructSommet(i).deb = *t;
+    m_summit->setDeb(i ,*t);
     for ( it = m_graph[i].begin(); it < m_graph[i].end(); it++){
-        if (s->getStructSommet(*it).etat == -1) {
-            PProfG(s, *it, t);
+        if (m_summit->getEtat(*it) == -1) {
+            PProfG(*it, t);
         }
     }
-    s->getStructSommet(i).etat = 1; // Etat explore
+    m_summit->setEtat(i, 1); // Etat explore
     (*t)++;
-    s->getStructSommet(i).fin = *t;
+    m_summit->setFin(i, *t);
 }
 
 
@@ -108,8 +134,49 @@ int ListeVoisins::getTaille(){
 }
 
 
-void ListeVoisins::setTaille(int t){
-    m_tailleGraph = t;
-    delete[] m_graph;
-    m_graph = new vector <int> [t];
+//void ListeVoisins::setTaille(int t){
+    //m_tailleGraph = t;
+    //delete[] m_graph;
+  //  m_graph = new vector <int> [t];
+//}
+
+void ListeVoisins::setSummitEtat (int i, int e) {
+    m_summit->setEtat(i, e);
+}
+
+void ListeVoisins::setSummitNom (int i, string s) {
+    m_summit->setNom(i, s);
+}
+
+void ListeVoisins::setSummitNum (int i, int n) {
+    m_summit->setNum(i, n);
+}
+
+void ListeVoisins::setSummitId (int i, int id) {
+    cout << "ibis : " << i << endl;
+    m_summit->setId(i, id);
+}
+
+void ListeVoisins::setSummitFreq (int i, int f) {
+    m_summit->setFreq(i, f);
+}
+
+void ListeVoisins::setSummitSize (int t) {
+    m_summit->setTaille(t);
+}
+
+int ListeVoisins::getSummitSize () {
+    return m_summit->getTaille();
+}
+
+int ListeVoisins::getIndice (int x) {
+    return m_summit->getIndice(x);
+}
+
+int ListeVoisins::getNbCFC(){
+    return m_summit->getNbCFC();
+}
+
+string ListeVoisins::getCFC(){
+    return m_summit->getCFC();
 }
