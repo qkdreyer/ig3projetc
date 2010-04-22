@@ -19,10 +19,15 @@ MatAdj::MatAdj () : m_size(0), m_Matrix(NULL){
 
 
 MatAdj::MatAdj (int s) : m_size(s) {
-    int i = 0;
+    int i = 0, j = 0;
     m_Matrix = new int*[m_size];
     for (i = 0; i < m_size; i++){
         m_Matrix[i] = new int[m_size];
+    }
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
+            m_Matrix[j][i] = 0;
+        }
     }
 }
 
@@ -69,6 +74,10 @@ void MatAdj::printMat () { // Affiche la matrice adjacente
         cout << endl;
     }
     cout << endl;
+}
+
+void MatAdj::addSummit (int x, int y) {
+    m_Matrix[x][y] = 1;
 }
 
 void MatAdj::PPG () { // Parcours en profondeur du graphe (appel sur PProfG)
@@ -153,3 +162,62 @@ void MatAdj::getTMinProf (int x, int y, int* t, int temp) { // Parcours en profo
     }
     m_summit->setEtat(x, 1); // Etat explore
 }
+
+int MatAdj::getSize () {
+    return m_size;
+}
+
+void MatAdj::setSize (int s) {
+    m_size = s;
+    int i = 0, j = 0;
+    m_Matrix = new int*[m_size];
+    for (i = 0; i < m_size; i++){
+        m_Matrix[i] = new int[m_size];
+    }
+    for (i = 0; i < m_size; i++) {
+        for (j = 0; j < m_size; j++) {
+            m_Matrix[j][i] = 0;
+        }
+    }
+}
+
+void MatAdj::setSummitEtat (int i, int e) {
+    m_summit->setEtat(i, e);
+}
+
+void MatAdj::setSummitNom (int i, string s) {
+    m_summit->setNom(i, s);
+}
+
+void MatAdj::setSummitNum (int i, int n) {
+    m_summit->setNum(i, n);
+}
+
+void MatAdj::setSummitId (int i, int id) {
+    m_summit->setId(i, id);
+}
+
+void MatAdj::setSummitFreq (int i, int f) {
+    m_summit->setFreq(i, f);
+}
+
+void MatAdj::setSummitSize (int t) {
+    m_summit->setTaille(t);
+}
+
+int MatAdj::getSummitSize () {
+    return m_summit->getTaille();
+}
+
+int MatAdj::getIndice (int x) {
+    return m_summit->getIndice(x);
+}
+
+int MatAdj::getNbCFC(){
+    return m_summit->getNbCFC();
+}
+
+string MatAdj::getCFC(){
+    return m_summit->getCFC();
+}
+

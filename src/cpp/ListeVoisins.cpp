@@ -154,8 +154,6 @@ int ListeVoisins::getTaille(){
 void ListeVoisins::setTaille(int t){
     m_tailleGraph = t;
     setSummitSize(t);
-    //delete[] m_graph;
-  //  m_graph = new vector <int> [t];
 }
 
 void ListeVoisins::setSummitEtat (int i, int e) {

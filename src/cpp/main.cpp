@@ -54,51 +54,48 @@ int main(int argc, char* argv[]) {
 
         fscanf(fic_in, "%d\n", &n); // lecture du nombre de sommets du graphe
         i = 0;
-        L.setTaille(n);
-        //s = iniSommet(n);
+        if (typestruct = 'l') {
+            L.setTaille(n);
+        } else if (typestruct = 'm'){
+            M.setSize(n);
+        }
         //d = iniSommet(n);
-        //M = iniMat(n);
-        //L = iniListe(n);
-        //P = iniListe(n);
         buffer = (char*) malloc(1000*sizeof(char));
         while (i < n) { // lecture des id / nom / frequence
             fscanf(fic_in, "%[^,], %d, %d\n", buffer, &x, &y);
             cout << "buffer : " << buffer << endl;
             cout << "m_tailleGraph : " << L.getSummitSize() << endl;
-            L.setSummitNom(i, buffer);
-            L.setSummitId(i, x);
-            L.setSummitFreq(i, y);
-            L.setSummitNum(i, i);
-
-            //strcpy(s[i].nom, buffer);
-            //s[i].num = i;
-            //s[i].id = x;
-            //s[i].freq = y;
+            if (typestruct = 'l') {
+                L.setSummitNom(i, buffer);
+                L.setSummitId(i, x);
+                L.setSummitFreq(i, y);
+                L.setSummitNum(i, i);
+            } else if (typestruct = 'm') {
+                M.setSummitNom(i, buffer);
+                M.setSummitId(i, x);
+                M.setSummitFreq(i, y);
+                M.setSummitNum(i, i);
+            }
             //d[i].id = x;
             //d[i].freq = y;
             i++;
         }
-        L.printSummits();
 
         fscanf(fic_in, "%d\n", &m); // lecture du nombre de sommets du graphe
         i = 0;
         while (i < m) { // lecture les relations entre les sommets
             fscanf(fic_in, "%d, %d\n", &x, &y);
-            x = L.getIndice(x);
-            y = L.getIndice(y);
             if (typestruct == 'm') {
-                //M[x][y] = 1; // remplissage de la matrice d'adjacence M
+                x = M.getIndice(x);
+                y = M.getIndice(y);
+                M.addSummit(x, y); // remplissage de la matrice d'adjacence M
             } else if (typestruct == 'l') {
+                x = L.getIndice(x);
+                y = L.getIndice(y);
                 L.addSummit(x, y);
-                //P.addSummit(y, x);
-                //ajoutFin(L, x, y); // creation de la liste d'adjacence L
-                //ajoutFin(P, y, x); // creation de la liste duale d'adjacence P
             }
             i++;
         }
-        cout << "CHECK : " << endl;
-        L.printListeAdj();
-        L.printListeAdjD();
 
         if (typestruct == 'm') { // Matrice
 
@@ -109,12 +106,8 @@ int main(int argc, char* argv[]) {
 
             L.PPG();
             L.PPGD();
-            //PPGD(P, s, n);
 
         }
-        cout << "CHECK : " << endl;
-        L.printSummits();
-        cout << endl << endl;
 
         fic_out = fopen(dir_out, "w+"); // traiement du fichier resultat
         temp = L.getNbCFC(); // recuperation du nombre de cfc
