@@ -101,6 +101,9 @@ s_sommet Sommet::getStructSommet (int x){
     if ((x >= 0) && (x < m_tailleGraph)){
         return m_tabSommet[x];
     }
+    else
+        cerr << "Erreur : x n'appartient pas a l'intervalle defini par m_tailleGraph" << endl;
+        exit (0);
 }
 
 int Sommet::getNbCFC () { // Renvoie le nombre de composantes fortement connexes
