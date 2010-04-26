@@ -12,6 +12,7 @@ AUTEUR           : Quentin DREYER / Pierre JAMBET / Michael NGUYEN
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "../h/matAdj.h"
 #include "../h/ListeVoisins.h"
@@ -25,7 +26,9 @@ int main(int argc, char* argv[]) {
     dir_in = "test/";dir_out = "test/";
     ListeVoisins L, P;
     MatAdj M;
-    FILE* fic_in, *fic_out;
+    FILE *fic_in, *fic_out;
+    //ifstream fic_in;
+    //ofstream fic_out;
 
     typestruct = 'l'; // Choix de la structure, m pour matrice, l pour liste
 
@@ -47,6 +50,7 @@ int main(int argc, char* argv[]) {
     dir_in += nom_in; // concaténation du repertoire test avec le nom du fichier d'entrée
     dir_out += nom_out; // concaténation du repertoire test avec le nom du fichier de sortie
 
+    //fic_in.open(dir_in.c_str(), ios::in);
     fic_in = fopen(dir_in.c_str(), "r");
     if (fic_in != NULL) { // lecture du graphe
 
@@ -105,6 +109,7 @@ int main(int argc, char* argv[]) {
 
         }
 
+        //fic_out.open(dir_out.c_str(), ios::out);
         fic_out = fopen(dir_out.c_str(), "w+"); // traiement du fichier resultat
         temp = L.getNbCFC(); // recuperation du nombre de cfc
         fprintf(fic_out, "%d\n", temp);
@@ -132,11 +137,13 @@ int main(int argc, char* argv[]) {
             i++;
         }
 
+        //fic_in.close()
+        //fic_out.close();
         fclose(fic_in);
         fclose(fic_out);
 
     } else {
-        printf("Lecture du fichier impossible\n");
+        cerr << "Lecture du fichier impossible" << endl;
     }
     system("PAUSE");
     return 0;
